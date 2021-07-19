@@ -1,7 +1,6 @@
-import React from 'react'
-import { Circle } from 'better-react-spinkit'
+import { Circle } from 'better-react-spinkit';
 
-function loading() {
+function Loading() {
     return (
         <center style={{display: "grid", placeItems: "center", height: "100vh"}}>
             <div>
@@ -11,10 +10,10 @@ function loading() {
                 style={{ marginBottom: 5, borderRadius: '50%' }}
                 height={200}
                  />
+            <Circle color="#4285F4" size={40}/>
             </div>
-            <Circle color="#4285F4" size={60}/>
         </center>
     )
 }
 
-export default loading
+export default Loading

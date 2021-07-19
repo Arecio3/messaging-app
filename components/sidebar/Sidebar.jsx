@@ -23,15 +23,15 @@ function Sidebar() {
   return (
     <Container className="sidebar">
       <Header>
-        <UserAvatar />
+        <UserAvatar style={{backgroundColor: "#4285F4"}}/>
 
         <IconsContainer>
         {/* Wrapping it in IconButton makes it a button */}
           <IconButton>
-            <ChatIcon/>
+            <ChatIcon style={{color: "#4285F4"}}/>
           </IconButton>
           <IconButton>
-          <MoreVertIcon/>
+          <MoreVertIcon style={{color: "#4285F4"}}/>
           </IconButton>
         </IconsContainer>
       </Header>
@@ -105,4 +105,7 @@ const UserAvatar = styled(Avatar)`
   }
 `;
 
-const IconsContainer = styled.div``;
+const IconsContainer = styled.div`
+color: #4285F4;
+
+`;
