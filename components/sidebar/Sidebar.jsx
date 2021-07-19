@@ -3,8 +3,23 @@ import React from "react";
 import styled from "styled-components";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import * as EmailValidator from "email-validator"
 import SearchIcon from "@material-ui/icons/Search";
-function Sidebar() {
+import swal from 'sweetalert';
+
+function Sidebar() { 
+    const createChat = () => {
+        const input = swal({
+            text: "Please enter Username",
+            content: "input",
+        })
+        if (!input) return null;
+
+        if (EmailValidator.validate(input)) {
+            // add chat into db
+            
+        }
+    };
   return (
     <Container className="sidebar">
       <Header>
@@ -26,7 +41,7 @@ function Sidebar() {
         <SearchInput placeholder="Search Chats"/>
       </Search>
 
-      <SidebarButton>New Chat</SidebarButton>
+      <SidebarButton onClick={createChat}>New Chat</SidebarButton>
     </Container>
   );
 }
