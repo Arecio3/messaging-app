@@ -1,4 +1,5 @@
 import { Avatar, IconButton } from "@material-ui/core";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
@@ -9,9 +10,11 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "../message/Message";
 import MicIcon from '@material-ui/icons/Mic';
 import MoodIcon from '@material-ui/icons/Mood';
-
+import firebase from 'firebase';
+import getRecipientEmail from "../../utils/getRecipientEmail";
 function MessageScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
+  const [input, setInput] = useState("")
   const router = useRouter();
   const [messagesSnapshot] = useCollection(
     db
@@ -20,6 +23,11 @@ function MessageScreen({ chat, messages }) {
       .collection("messages")
       .orderBy("timestamp", "asc")
   );
+  const [recipientSnapshot] = useCollection(
+    db
+    .collection("users")
+    .where("email", "==", getRecipientEmail(chat.users, user))
+    );
 
   const showMessages = () => {
     if (messagesSnapshot) {
@@ -40,13 +48,38 @@ function MessageScreen({ chat, messages }) {
     }
   };
 
+  const sendMessage = (e) => {
+    e.preventDefault();
+    db.collection("users").doc(user.uid).set({
+        lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+      // Merge = wont overide
+    },
+     { merge: true }
+    );
+
+    db.collection('chats').doc(router.query.id).collection('messages').add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      message: input,
+      user: user.email,
+      photoURL: user.photoURL,
+    });
+
+    setInput("");
+  };
+  // gives us user data
+  const recipient = recipientSnapshot?.docs?.[0]?.data();
+  const recipientEmail = getRecipientEmail(chat.users, user);
   return (
     <Container>
       <Header>
-        <Avatar />
+        {recipient ? (
+          <Avatar src={recipient?.photoURL}/> 
+        ): (
+          <Avatar>{recipientEmail[0]}</Avatar>
+        )}
 
         <HeaderInfo>
-          <h3>Recipient Email</h3>
+          <h3>{recipientEmail}</h3>
           <p>Last active..</p>
         </HeaderInfo>
         <HeaderIcons>
@@ -65,8 +98,10 @@ function MessageScreen({ chat, messages }) {
 
       <InputContainer>
       <MoodIcon/>
+      {/* Every time user types it updates state */}
+      <Input value={input} onChange={e => setInput(e.target.value)}/>
+      <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>
       <MicIcon />
-      <Input/>
       </InputContainer>
     </Container>
   );
