@@ -12,6 +12,9 @@ import MicIcon from '@material-ui/icons/Mic';
 import MoodIcon from '@material-ui/icons/Mood';
 import firebase from 'firebase';
 import getRecipientEmail from "../../utils/getRecipientEmail";
+import TimeAgo from "timeago-react";
+import * as React from 'react';
+
 function MessageScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const [input, setInput] = useState("")
@@ -25,9 +28,9 @@ function MessageScreen({ chat, messages }) {
   );
   const [recipientSnapshot] = useCollection(
     db
-    .collection("users")
-    .where("email", "==", getRecipientEmail(chat.users, user))
-    );
+      .collection("users")
+      .where("email", "==", getRecipientEmail(chat.users, user))
+  );
 
   const showMessages = () => {
     if (messagesSnapshot) {
@@ -41,7 +44,7 @@ function MessageScreen({ chat, messages }) {
           }}
         />
       ));
-    }  else {
+    } else {
       return JSON.parse(messages).map((message) => (
         <Message key={message.id} user={message.user} message={message} />
       ));
@@ -51,10 +54,10 @@ function MessageScreen({ chat, messages }) {
   const sendMessage = (e) => {
     e.preventDefault();
     db.collection("users").doc(user.uid).set({
-        lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+      lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
       // Merge = wont overide
     },
-     { merge: true }
+      { merge: true }
     );
 
     db.collection('chats').doc(router.query.id).collection('messages').add({
@@ -73,14 +76,24 @@ function MessageScreen({ chat, messages }) {
     <Container>
       <Header>
         {recipient ? (
-          <Avatar src={recipient?.photoURL}/> 
-        ): (
+          <Avatar src={recipient?.photoURL} />
+        ) : (
           <Avatar>{recipientEmail[0]}</Avatar>
         )}
 
         <HeaderInfo>
           <h3>{recipientEmail}</h3>
-          <p>Last active..</p>
+          {recipientSnapshot ? (
+            <p>Last active: {` `}
+              {recipient?.lastSeen?.toDate() ? (
+                <TimeAgo dateTime={recipient?.lastSeen?.toDate()} live />
+              ) : (
+                "Unavailable"
+              )}
+            </p>
+          ) : (
+            <p>Loading Last active...</p>
+          )}
         </HeaderInfo>
         <HeaderIcons>
           <IconButton>
@@ -97,11 +110,11 @@ function MessageScreen({ chat, messages }) {
       </MessageContainer>
 
       <InputContainer>
-      <MoodIcon/>
-      {/* Every time user types it updates state */}
-      <Input value={input} onChange={e => setInput(e.target.value)}/>
-      <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>
-      <MicIcon />
+        <MoodIcon />
+        {/* Every time user types it updates state */}
+        <Input value={input} onChange={e => setInput(e.target.value)} />
+        <button disabled={!input} type="submit" onClick={sendMessage}>Send</button>
+        <MicIcon />
       </InputContainer>
     </Container>
   );
@@ -142,14 +155,31 @@ const HeaderInfo = styled.div`
 const InputContainer = styled.form`
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   position: sticky;
   bottom: 0;
   background-color: white;
   z-index: 100;
+
+  > button {
+    margin-right: 5px;
+    background-color: #e5ded8;
+    padding: 5px;
+    border-radius: 5px;
+    color: gray;
+    border: none;
+
+    :enabled {
+      border: none;
+      background-color: #4285f4;
+      padding: 5px;
+      border-radius: 5px;
+      color: whitesmoke;
+    }
+  }
   `;
 
-  const Input = styled.input`
+const Input = styled.input`
     flex: 1;
     padding: 20px;
     background-color: whitesmoke;
