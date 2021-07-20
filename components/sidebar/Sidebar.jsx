@@ -67,7 +67,7 @@ function Sidebar() {
 
       <SidebarButton onClick={createChat}>New Chat</SidebarButton>
       {chatsSnapshot?.docs.map((chat) => (
-        <Chat key={chat.id} id={chat.id} user={chat.data().users}/>
+        <Chat key={chat.id} id={chat.id} users={chat.data().users}/>
       ))}
     </Container>
   );
@@ -101,6 +101,7 @@ const SearchInput = styled.input`
   outline-width: 0;
   border: none;
   flex: 1;
+  margin-left: 30px;
 `;
 // const HeaderTitle = styled.div`
 // display: flex;
