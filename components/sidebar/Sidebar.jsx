@@ -89,6 +89,11 @@ overflow-y: scroll;
 
 -ms-overflow-style: none; /* IE and Edge */
  scrollbar-width: none; /* FireFox */
+
+ @media (max-width: 600px) {
+   min-width: 200px;
+   font-size: 11px;
+ }
 `;
 
 const SidebarButton = styled(Button)`

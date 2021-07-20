@@ -19,6 +19,7 @@ function MessageScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const [input, setInput] = useState("")
   const router = useRouter();
+  const endOfMessagesRef = useRef(null);
   const [messagesSnapshot] = useCollection(
     db
       .collection("chats")
@@ -51,6 +52,13 @@ function MessageScreen({ chat, messages }) {
     }
   };
 
+  const scrollToBottom = () => {
+    endOfMessagesRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    })
+  }
+
   const sendMessage = (e) => {
     e.preventDefault();
     db.collection("users").doc(user.uid).set({
@@ -68,6 +76,7 @@ function MessageScreen({ chat, messages }) {
     });
 
     setInput("");
+    scrollToBottom();
   };
   // gives us user data
   const recipient = recipientSnapshot?.docs?.[0]?.data();
@@ -106,7 +115,7 @@ function MessageScreen({ chat, messages }) {
       </Header>
       <MessageContainer>
         {showMessages()}
-        <EndOfMessage />
+        <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
 
       <InputContainer>
@@ -150,6 +159,16 @@ const HeaderInfo = styled.div`
     font-size: 14px;
     color: gray;
   }
+
+  @media (max-width: 600px) {
+    > h3 {
+      font-size: 10px
+    }
+
+    > p {
+      font-size: 7px;
+    }
+  }
 `;
 
 const InputContainer = styled.form`
@@ -190,7 +209,9 @@ const Input = styled.input`
     margin-right: 15px;
   `;
 
-const EndOfMessage = styled.div``;
+const EndOfMessage = styled.div`
+margin-bottom: 50px;
+`;
 
 const HeaderIcons = styled.div``;
 
@@ -198,4 +219,8 @@ const MessageContainer = styled.div`
 padding: 30px;
 background-color: #e5ded8;
 min-height: 90vh;
+
+@media (max-width: 600px) {
+    padding: 10px;
+  }
 `;

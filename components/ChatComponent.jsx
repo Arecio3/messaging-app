@@ -47,6 +47,7 @@ const Container = styled.div`
   :hover {
     background-color: #e9eaeb;
   }
+
 `;
 
 const UserAvatar = styled(Avatar)`

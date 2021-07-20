@@ -35,17 +35,29 @@ const MessageElement = styled.p`
   padding-bottom: 25px;
   position: relative;
   text-align: center;
+
+  @media (max-width: 600px) {
+    padding: 13px;
+  }
 `;
 
 const Sender = styled(MessageElement)`
   margin-left: auto;
   background-color: #4285f4;
   color: white;
+
+  @media (max-width: 600px) {
+    margin-right: none;
+  }
 `;
 
 const Receiver = styled(MessageElement)`
   background-color: whitesmoke;
   text-align: left;
+
+  @media (max-width: 600px) {
+    text-align: inherit;
+  }
 `;
 
 const Timestamp = styled.span`
@@ -56,4 +68,9 @@ const Timestamp = styled.span`
   bottom: 0;
   text-align: right;
   right: 0;
+  @media (max-width: 600px) {
+   padding-bottom: 2px;
+   padding-top: 3px;
+   font-size: 7px;
+  }
 `;
