@@ -9,15 +9,15 @@ import { auth, db } from "../../firebase";
 import swal from "sweetalert";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import Chat from "../chat/Chat";
+import ChatComponent from "../ChatComponent";
 
 function Sidebar() {
   const [user] = useAuthState(auth);
   // Goes to firestore db querys users array and checks email
-  const userChatRef = db
+  const userChatsRef = db
     .collection("chats")
     .where("users", "array-contains", user.email);
-  const [chatsSnapshot] = useCollection(userChatRef);
+  const [chatsSnapshot] = useCollection(userChatsRef);
 
 
   const createChat = () => {
@@ -37,12 +37,12 @@ function Sidebar() {
     });
   };
 
-  const chatAlreadyExist = (recipientEmail) => {
+  const chatAlreadyExist = (recipientEmail) => 
     !!chatsSnapshot?.docs.find(
       (chat) =>
         chat.data().users.find((user) => user === recipientEmail)?.length > 0
     );
-  };
+  
 
   return (
     <Container className="sidebar">
@@ -67,7 +67,7 @@ function Sidebar() {
 
       <SidebarButton onClick={createChat}>New Chat</SidebarButton>
       {chatsSnapshot?.docs.map((chat) => (
-        <Chat key={chat.id} id={chat.id} users={chat.data().users}/>
+        <ChatComponent key={chat.id} id={chat.id} users={chat.data().users} db={db}/>
       ))}
     </Container>
   );

@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import { auth, provider } from '../firebase';
 
-function Login() {
-
+function login() {
+    // Static Site Generation prepares page on a server cache it and when user requests it its ready to go 
     const signIn = () => {
         // this is how you get cool google sign in functionality
-        auth.signInWithPopup(provider).catch(alert);
+        auth.signInWithPopup(provider).catch(console.error);
     }
 
     return (
@@ -25,7 +25,7 @@ function Login() {
     )
 }
 
-export default Login
+export default login
 
 const Container = styled.div`
 display: grid;
