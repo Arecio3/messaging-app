@@ -52,7 +52,7 @@ function Sidebar() {
         <IconsContainer>
           {/* Wrapping it in IconButton makes it a button */}
           <IconButton>
-            <ChatIcon style={{ color: "#4285F4" }} />
+            <ChatIcon style={{ color: "#4285F4" }} onClick={createChat}/>
           </IconButton>
           <IconButton>
             <MoreVertIcon style={{ color: "#4285F4" }} />

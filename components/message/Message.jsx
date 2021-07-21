@@ -28,14 +28,12 @@ const Container = styled.div``;
 
 const MessageElement = styled.p`
   width: fit-content;
-  padding: 15px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius:25px;
   margin: 10px;
   min-width: 60px;
   padding-bottom: 25px;
   position: relative;
-  text-align: center;
-
   @media (max-width: 600px) {
     padding: 13px;
   }
@@ -45,6 +43,7 @@ const Sender = styled(MessageElement)`
   margin-left: auto;
   background-color: #4285f4;
   color: white;
+  border-bottom-right-radius: 2px;
 
   @media (max-width: 600px) {
     margin-right: none;
@@ -54,6 +53,9 @@ const Sender = styled(MessageElement)`
 const Receiver = styled(MessageElement)`
   background-color: whitesmoke;
   text-align: left;
+  border-bottom-left-radius: 2px;
+
+
 
   @media (max-width: 600px) {
     text-align: inherit;
